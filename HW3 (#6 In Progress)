@@ -1,0 +1,41 @@
+4.
+
+twice successor 0                           = 2 = 2^K = 2^1
+(twice (twice successor)) 0                 = 4 = 2^K = 2^2
+(twice (twice (twice successor))) 0         = 8 = 2^K = 2^3
+(twice (twice (twice (twice successor)))) 0 = 16 = 2^K = 2^4
+
+TESTING: 
+ 
+twice successor 0                 = 2     STARTS WITH 2^K
+twice twice successor 0           = 4     CONTINUES WITH 2^XK-1
+twice twice twice successor 0     = 16    CONTINUES WITH 2^XK-1
+twice twice twice twice successor = 65536 CONTINUES WITH 2^XK-1
+
+2  = 2^1     -> NORMAL 2^K
+4  = 2^2     -> 2^(PREVIOUS FOUND TERM) = 2^2
+16 = 2^4     -> 2^(PREVIOUS FOUND TERM) = 2^4
+65536 = 2^16 -> 2^(PREVIOUS FOUND TERM) = 2^16
+
+The expressions return 2^XK-1
+XK-1 = Previously found term 
+
+6. 
+
+let rec evaluate = function
+| Num n -> Some n
+| Neg e -> match evaluate e with
+	   | Some x -> Some(-x)
+	   | _ -> None
+| Sum (e1,e2) -> match evaluate(e1, e2) with
+	   | (Some x, Some y) -> Some(x+y)
+	   | _ -> None
+| Diff (e1,e2) -> match evaluate(e1, e2) with
+	   | (Some x, Some y) -> Some(x-y)
+	   | _ -> None
+| Prod (e1,e2) -> match evaluate(e1, e2) with
+	   | (Some x, Some y) -> Some(x*y)
+	   | _ -> None
+| Quot (e1,e2) -> match evaluate(e1, e2) with 
+	   | (Some x, Some y) -> if y = 0 then None else Some(x/y)
+	   | _ -> None
