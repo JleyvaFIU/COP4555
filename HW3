@@ -3,7 +3,7 @@
 twice successor 0                           = 2 = 2^K = 2^1
 (twice (twice successor)) 0                 = 4 = 2^K = 2^2
 (twice (twice (twice successor))) 0         = 8 = 2^K = 2^3
-(twice (twice (twice (twice successor)))) 0 = 16 = 2^K = 2^4
+(twice (twice (twice (twice successor)))) 0 = 16  = 2^K = 2^4
 
 TESTING: 
  
@@ -25,17 +25,17 @@ XK-1 = Previously found term
 let rec evaluate = function
 | Num n -> Some n
 | Neg e -> match evaluate e with
-	   | Some x -> Some(-x)
-	   | _ -> None
-| Sum (e1,e2) -> match evaluate(e1, e2) with
-	   | (Some x, Some y) -> Some(x+y)
-	   | _ -> None
-| Diff (e1,e2) -> match evaluate(e1, e2) with
-	   | (Some x, Some y) -> Some(x-y)
-	   | _ -> None
-| Prod (e1,e2) -> match evaluate(e1, e2) with
-	   | (Some x, Some y) -> Some(x*y)
-	   | _ -> None
-| Quot (e1,e2) -> match evaluate(e1, e2) with 
-	   | (Some x, Some y) -> if y = 0 then None else Some(x/y)
-	   | _ -> None
+	   | Some e -> Some(-e)
+	   | _      -> None
+| Sum(e1,e2) -> match evaluate(e1, e2) with
+	   | (Some e1, Some e2) -> Some(e1+e2)
+	   | _                  -> None
+| Diff(e1,e2) -> match evaluate(e1,e2) with
+	   | (Some e1, Some e2) -> Some(e1-e2)
+	   | _                  -> None
+| Prod(e1,e2) -> match evaluate(e1, e2) with
+	   | (Some e1, Some e2) -> Some(e1*e2)
+	   | _                  -> None
+| Quot(e1,e2) -> match evaluate(e1, e2) with 
+	   | (Some e1, Some e2) -> if e2 = 0 then None else Some(e1/e2)
+	   | _                  -> None
