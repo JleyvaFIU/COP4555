@@ -83,8 +83,11 @@ Compare the efficiency of flatten1 xs and flatten2 xs, both in terms of asymptot
 *Asymptotic time compexity comparison 
 * When using the functions on a list of lenght n fold and foldback will have the same complexity for each operation O(1)
 * Hence the complexity of both will be O(n). 
-*
-*
+* However the complexity change in the @ function used in flatten1 and flatten2
+* The complexit of @ is O(n) where n is the lenght of the first list passed.
+* In this case, Complexity of flatten1 will be O(m*n*(n-1)) where m is the length of each element in xs (in this case 1)
+* On the other hand, complexity of flatten2 will be O(n*m) or in this case just O(n) because m=1
+* It is clear that flatten2 will be more efficient and we can see the experimental results bellow.  
 *)
 let rec fold f a = function
     | []    -> a
@@ -103,12 +106,12 @@ let flatten1 xs = List.fold (@) [] xs
 
 let flatten2 xs = List.foldBack (@) xs []
 
-let listX = [ for i in 1..5000 -> [i] ]
+let listX = [ for i in 1..10000 -> [i] ]
 #time "on";;
 
-(*Real: 00:00:01.051, CPU: 00:00:01.093, GC gen0: 159, gen1: 5, gen2: 1*)
+(*00:00:03.921, CPU: 00:00:03.890, GC gen0: 406, gen1: 120, gen2: 0*)
 let xs1 = flatten1 listX;;
 
-(*Real: 00:00:00.002, CPU: 00:00:00.000, GC gen0: 0, gen1: 0, gen2: 0*)
+(*00:00:00.003, CPU: 00:00:00.000, GC gen0: 0, gen1: 0, gen2: 0*)
 let xs2 = flatten2 listX;;
 
