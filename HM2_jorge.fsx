@@ -1,3 +1,5 @@
+open System.Xml.Xsl
+
 (*
 2-----An F# list can be thought of as representing a set, where the order of the elements in the list is irrelevant.
 Write an F# function powerset such that powerset set returns the set of all subsets of set. For example,
@@ -20,7 +22,7 @@ let rec powerset =
 
 
 
-(*
+(*#6
 Recall that an F# function that takes two arguments can be coded 
 in either uncurried form (in which case it takes a pair as its input) or 
 curried form (in which case it takes the first argument and returns a function that takes the second argument).
@@ -83,3 +85,44 @@ let rec insert x = function
 let rec permute = function
 | []    -> [[]]
 | x::xs -> appmap (insert x) (permute xs)
+
+
+(*
+The transpose of a matrix M is the matrix obtained by reflecting Mabout its diagonal. For example, the transpose of
+  / 1 2 3 \
+  \ 4 5 6 /
+is
+  / 1 4 \
+  | 2 5 |
+  \ 3 6 /
+An m-by-n matrix can be represented in F# as a list of m rows, each of which is a list of length n. For example, the first matrix above is represented as the list
+  [[1;2;3];[4;5;6]]
+Write an efficient F# function to compute the transpose of an m-by-nmatrix:
+  > transpose [[1;2;3];[4;5;6]];;
+  val it : int list list = [[1; 4]; [2; 5]; [3; 6]]
+Assume that all the rows in the matrix have the same length.
+*)
+//#3 - Done. Transpose a matrix of m x n
+//Requires remove_first
+let remove_firsto = function
+    | [] -> []
+    | x::xs -> xs
+let rec transposeo = function
+    | [] -> []
+    | list -> (List.map (List.head) list) :: if (List.length (List.head list)) > 1 then (transposeo (List.map (remove_firsto) list)) else [] //Just need to remove first element of each list on this recursive call
+
+
+
+
+let remove_first = function
+    | [] -> []
+    | [x]->[]
+    | x::xs -> xs
+
+let first =function
+    |[x]->x
+    |x::xs-> x
+
+let rec transpose = function
+    |[]->[]
+    |xs-> (List.map (fun x -> if(List.length x > 0) then (first x) else []) (xs)) :: transpose (List.map (remove_first) xs)

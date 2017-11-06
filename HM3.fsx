@@ -76,4 +76,39 @@ type 'a stream = Cons of 'a * (unit -> 'a stream)
 let rec map f (Cons(x, xsf)) = 
     Cons(f x, fun() -> map f (xsf()))
 
+(**
+*3-
+Compare the efficiency of flatten1 xs and flatten2 xs, both in terms of asymptotic time compexity and experimentally
+*
+*Asymptotic time compexity comparison 
+* When using the functions on a list of lenght n fold and foldback will have the same complexity for each operation O(1)
+* Hence the complexity of both will be O(n). 
+*
+*
+*)
+let rec fold f a = function
+    | []    -> a
+    | x::xs -> fold f (f a x) xs;;
+
+
+let rec foldBack f xs a =
+      match xs with
+      | []    -> a
+      | y::ys -> f y (foldBack f ys a);;
+
+
+
+
+let flatten1 xs = List.fold (@) [] xs
+
+let flatten2 xs = List.foldBack (@) xs []
+
+let listX = [ for i in 1..5000 -> [i] ]
+#time "on";;
+
+(*Real: 00:00:01.051, CPU: 00:00:01.093, GC gen0: 159, gen1: 5, gen2: 1*)
+let xs1 = flatten1 listX;;
+
+(*Real: 00:00:00.002, CPU: 00:00:00.000, GC gen0: 0, gen1: 0, gen2: 0*)
+let xs2 = flatten2 listX;;
 
