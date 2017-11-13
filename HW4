@@ -1,0 +1,29 @@
+Homework #4
+
+1. Modify the grammar to allow an exponential operator, ^, so that we can write expressions like i + i ^ i * i. Of course, your modified grammar should be unambiguous. Give exponentiation higher precedence than the other binary operators and (unlike the other binary operators) make it associate to the right. 
+
+E -> E + T | E - T | T
+T -> T * F | T / F | F
+F -> X ^ F | X
+X -> i | (E)
+
+Solving for i + i ^ i + i:
+
+				      E
+             / \
+            /   \ 
+	         /	|	 \
+		      E		+	  T
+         /|\      |
+		   /  |  \		|
+	    E   +   T   F
+      |       |		|
+      T	      F	  X
+	    |      /|\  |
+      F     X ^ F i
+      |     |   |
+      X     i   X
+      |         |
+      i         i	
+
+
