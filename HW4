@@ -9,21 +9,51 @@ X -> i | (E)
 
 Solving for i + i ^ i + i:
 
-				      E
+              E
              / \
             /   \ 
-	         /	|	 \
-		      E		+	  T
+           /  |  \
+          E   +   T
          /|\      |
-		   /  |  \		|
-	    E   +   T   F
-      |       |		|
-      T	      F	  X
-	    |      /|\  |
+       /  |  \    |
+      E   +   T   F
+      |       |   |
+      T       F   X
+      |      /|\  |
       F     X ^ F i
       |     |   |
       X     i   X
       |         |
-      i         i	
+      i         i  
 
 
+2. Recall the grammar for the tiny language used in our discussion of recursive-descent parsing. Let us extend the grammar to allow both if-then and if-then-else statements:
+S -> if E then S | if E then S else S | begin S L | print E
+L -> end | ; S L
+E -> i
+
+Consider the input: if i then if i then print i else print i
+
+CFG1:
+                S
+			 /  |  \     \
+			if  E  then   S
+			    |      /  |  \    \    \     \
+				i    if   E  then  S   else   S
+				          |       / \        / \
+						  i    print E   print  E
+						             |          |
+									 i          i
+									
+CFG2:
+                S
+			 /  |  \     \           \     \
+			if  E  then   S          else   S
+			    |      /  |  \    \        / \ 
+				i    if   E  then  S   print  E 
+				          |       / \         |
+						  i    print E        i
+						             |          
+									 i
+
+The language is ambiguous as it produces two CFGs for the same input.
