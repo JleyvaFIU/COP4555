@@ -5,6 +5,10 @@ open Parser.Parse
 
 //Sample use of the parser
 let input = parsestr "iszero (succ 7)";;
+let input1 =  parsestr "if iszero 0 then 1 else 2";;
+let input2 = parsestr "if iszero 2 then succ 5 else succ 10";;
+let input3 = parsestr "if iszero 0 then succ 5 else succ 10";;
+let input4 = parsestr "if iszero 1 then succ 5 else pred 10";;
 
 //Implementing the interpreter
 let rec interp = function
