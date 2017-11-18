@@ -25,3 +25,18 @@ let rec interp = function
     | APP (ISZERO, NUM f2) -> BOOL (f2 = 0) //Evaluate the ISZERO term
     | APP (f1, f2) -> interp (APP (f1, interp f2)) //Evaluate any APP term where the second term is not a NUM
     | _ -> failwith "Not valid or not implemented"
+
+(** 
+ * Substitutes a string/ID x in a term e with a term t
+ *
+ * @param term e - The term that's going to be modified
+ * @param ID x - The target or needle
+ * @param term t - The term that's going to be used to replace x where x is found
+ * @return term - The term e where x was replaced by t
+ *)
+let rec subst e x t = 
+    match e with
+    | ERROR x -> ERROR x //If we find an error, return it
+    | APP(f1, ID y) -> if x = y then APP(f1, t) else APP(f1, ID y) //If we are substituting an ID and it matches x, replace it, else return the original
+    | APP(f1, APP (f2, f3)) -> APP(f1, (subst(APP(f2, f3)) x t)) //If we are substituting an APP, carry the search down
+    | _ -> failwith "Invalid substitution requested"
