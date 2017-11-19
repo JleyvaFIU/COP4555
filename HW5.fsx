@@ -18,11 +18,14 @@ let rec interp = function
     | SUCC -> SUCC //If it is the SUCC term, return it. We don't evaluate here
     | PRED -> PRED //If it is the PRED term, return it. We don't evaluate here
     | ISZERO -> ISZERO //If it is the ISZERO term, return it. We don't evaluate here
+    | ID i -> ID i
+    | FUN (x, y) -> FUN(x, y) //This is the identity function. No evaluation here.
     | IF (BOOL b, e1, e2) -> if b then interp e1 else interp e2 //Evaluate the IF function. b must be a BOOL term, otherwise, fall down
     | IF (APP (f1, f2), e1, e2) -> interp (IF((interp (APP(f1, f2))), e1, e2)) //Evaluate the IF function. b can be any APP term
     | APP (SUCC, NUM f2) -> NUM (f2 + 1) //Evaluate the SUCC term
     | APP (PRED, NUM f2) -> NUM (f2 - 1) //Evaluate the PRED term
     | APP (ISZERO, NUM f2) -> BOOL (f2 = 0) //Evaluate the ISZERO term
+    | APP (FUN(x, e), t) -> interp (subst e x t)
     | APP (f1, f2) -> interp (APP (f1, interp f2)) //Evaluate any APP term where the second term is not a NUM
     | _ -> failwith "Not valid or not implemented"
 
