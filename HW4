@@ -1,0 +1,59 @@
+Homework #4
+
+1. Modify the grammar to allow an exponential operator, ^, so that we can write expressions like i + i ^ i * i. Of course, your modified grammar should be unambiguous. Give exponentiation higher precedence than the other binary operators and (unlike the other binary operators) make it associate to the right. 
+
+E -> E + T | E - T | T
+T -> T * F | T / F | F
+F -> X ^ F | X
+X -> i | (E)
+
+Solving for i + i ^ i + i:
+
+              E
+             / \
+            /   \ 
+           /  |  \
+          E   +   T
+         /|\      |
+       /  |  \    |
+      E   +   T   F
+      |       |   |
+      T       F   X
+      |      /|\  |
+      F     X ^ F i
+      |     |   |
+      X     i   X
+      |         |
+      i         i  
+
+
+2. Recall the grammar for the tiny language used in our discussion of recursive-descent parsing. Let us extend the grammar to allow both if-then and if-then-else statements:
+S -> if E then S | if E then S else S | begin S L | print E
+L -> end | ; S L
+E -> i
+
+Consider the input: if i then if i then print i else print i
+
+CFG1:
+                S
+			 /  |  \     \
+			if  E  then   S
+			    |      /  |  \    \    \     \
+				i    if   E  then  S   else   S
+				          |       / \        / \
+						  i    print E   print  E
+						             |          |
+									 i          i
+									
+CFG2:
+                S
+			 /  |  \     \           \     \
+			if  E  then   S          else   S
+			    |      /  |  \    \        / \ 
+				i    if   E  then  S   print  E 
+				          |       / \         |
+						  i    print E        i
+						             |          
+									 i
+
+The language is ambiguous as it produces two CFGs for the same input.
