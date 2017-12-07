@@ -45,11 +45,13 @@ let rec W (env, e) =
         let (s4, t3) = W (s3 << s2 << s1 << env, e3) //Find type of e3
         let s5 = unify (s4 t2, t3) //Make sure e2 has the same type as e3
         (s5 << s4 << s3 << s2 << s1, s5 t3) //Return
+    | ID x -> (I, VARIABLE x)
     | x -> failwith "Some case was incomplete";;
 
 
 let input00 = parsestr "if false then 1 else 2";;
 let input0 = parsestr "if iszero 0 then succ 1 else succ 2";;
+let input11 = parsestr "fun x -> succ x";;
 let input = parsestr "(rec d -> fun n -> if iszero n then 0 else succ (succ (d (pred n)))) 3";;
 let input1= parsestr "let Ack = rec A ->  fun x -> fun y ->if iszero x then  succ y  else if iszero y then  A (pred x) 1  else  A (pred x) (A x (pred y))in  Ack 3 6";;
 let input2 = parsestr "let plus = rec p -> fun x -> fun y -> if iszero x then y else p (pred x) (succ y) in  let times = rec t -> fun x -> fun y -> if iszero x then 0 else plus y (t (pred x) y)in  let factorial = rec f ->fun n -> if iszero n then 1 else times n (f (pred n))in factorial 6";;
