@@ -25,11 +25,19 @@ let rec W (env, e) =
     | SUCC -> (I, ARROW(INTEGER, INTEGER))
     | PRED -> (I, ARROW(INTEGER, INTEGER))
     | ISZERO -> (I, ARROW(INTEGER, BOOLEAN))
+    | FUN (x, b) -> 
+        let a = newtypevar()
+        let (s,t) = W (update env x a, b)
+        (s, ARROW(s a,t))
     | APP (m1, m2) -> 
         let (s1, t1) = W(env, m1) //Find the type of m1
+        let output = match (t1) with
+            | ARROW(input, output) -> output
+            | anything -> anything
         let (s2, t2) = W(s1 << env, m2) //Find the type of m2
-        let s3 = unify(s2 t1, t2) //Unify the argument to the function
-        (s3 << s2 << s1, s3 t1) //Return the environment, with the modification to the type
+        let a = newtypevar()
+        let s3 = unify(s2 t1, ARROW(t2, a)) //Unify the argument to the function
+        (s3 << s2 << s1, output) //Return the environment, with the modification to the type
     | IF (e1, e2, e3) ->
         let (s1, t1) = W (env, e1) //Find type of e1
         let s2 = unify (t1, BOOLEAN) //e1 must be a boolean
@@ -46,4 +54,6 @@ let input = parsestr "(rec d -> fun n -> if iszero n then 0 else succ (succ (d (
 let input1= parsestr "let Ack = rec A ->  fun x -> fun y ->if iszero x then  succ y  else if iszero y then  A (pred x) 1  else  A (pred x) (A x (pred y))in  Ack 3 6";;
 let input2 = parsestr "let plus = rec p -> fun x -> fun y -> if iszero x then y else p (pred x) (succ y) in  let times = rec t -> fun x -> fun y -> if iszero x then 0 else plus y (t (pred x) y)in  let factorial = rec f ->fun n -> if iszero n then 1 else times n (f (pred n))in factorial 6";;
 
-W(emptyenv, input00);;
+let (s, t) = W(emptyenv, input00);;
+let result = s t;;
+typ2str result;;
